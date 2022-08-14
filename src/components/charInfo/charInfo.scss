@@ -27,6 +27,11 @@
             object-fit: cover;
         }
     }
+    &__basics__default {
+        img {
+            object-fit: contain;
+        }
+    }
     &__btns {
         margin-top: 35px;
         a:nth-child(2) {

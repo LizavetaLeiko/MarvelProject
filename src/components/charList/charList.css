@@ -21,6 +21,11 @@
   row-gap: 30px;
 }
 
+.char__item__default img {
+  -o-object-fit: unset;
+     object-fit: unset;
+}
+
 .char__item {
   width: 200px;
   height: 318px;
@@ -35,18 +40,13 @@
   transition: 0.3s transform, 0.3s -webkit-transform;
 }
 
-.char__item__img {
+.char__item img {
   width: 200px;
   height: 200px;
   -o-object-fit: cover;
      object-fit: cover;
   -webkit-transform: translate(-15px, -15px);
           transform: translate(-15px, -15px);
-}
-
-.char__item__img__default {
-  -o-object-fit: unset;
-     object-fit: unset;
 }
 
 .char__item_selected {

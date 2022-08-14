@@ -5,6 +5,7 @@ class MarvelService{
 
     _apiBase = 'https://gateway.marvel.com:443/v1/public/';
     _apiKey = 'apikey=92425ceda3787c2b0ec64e1cf38bf60b';
+    _baseOffset = 210;
 
     getResourse = async (url) => {
         let resourse = await fetch(url);
@@ -15,9 +16,9 @@ class MarvelService{
 
         return await resourse.json();
     }
-
-    getAllCharacters = async ()=>{
-        const resourse = await this.getResourse(`${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`);
+                                //  можно так не передавать аргумент, а просто передать переменную сразу. Но так функция более мобильна
+    getAllCharacters = async (offset = this._baseOffset)=>{
+        const resourse = await this.getResourse(`${this._apiBase}characters?limit=9&offset=${offset}&${this._apiKey}`);
         // в качестве resourse мы полуим большой масив с объектами из всех персонажей.
         // Каждого персонаа переерем и каждый item перебора будет прокидывться в char.
         // Такой синтаксис т.к. _transformCharacter и так стрелоная функция.
@@ -39,6 +40,7 @@ class MarvelService{
         thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension,
         homepage: char.urls[0].url,
         wiki: char.urls[0].url,
+        comics: char.comics.items,
         }
     }
 }

@@ -9,6 +9,9 @@
     transition: 0.3s transform;
     border: none;
     background-color: transparent;
+    &:disabled{
+        filter: grayscale(50%);
+    }
     cursor: pointer;
     &__long {
         display: block;

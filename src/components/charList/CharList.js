@@ -10,15 +10,33 @@ class CharList extends Component {
         itemsArr: [],
         loading: true,
         error: false,
+        newItemLoading: false,
+        offset: 210,
+        charEnded: false,
     }
 
     marvelService = new MarvelService();
 
-    onLoaded = (itemsArr) => {
+    onCharLoading =()=>{
         this.setState({
-            itemsArr,
-            loading: false,
+            newItemLoading: true,
         })
+    }
+    // такой синтаксис, чтобы при подгрузке 9 новых персонажей они прибавлялись в массив, а не заменяли данне
+    onLoaded = (newItemsArr) => {
+
+        let ended = false;
+        if(newItemsArr.length < 9){
+            ended = true;
+        }
+
+        this.setState(({offset, itemsArr}) =>({
+            itemsArr: [...itemsArr, ...newItemsArr],
+            loading: false,
+            newItemLoading: false,
+            offset: offset + 9,
+            charEnded: ended,
+        }))
     }
 
     onError =()=>{
@@ -33,17 +51,22 @@ class CharList extends Component {
     }
     
 
+    onRequest = (offset) => {
+        this.onCharLoading();
+        this.marvelService.getAllCharacters(offset).then(this.onLoaded).catch(this.onError);
+    }
+
     createCharList = (arr)=>{
 
         const items = arr.map(item => {
-            let charItemClassName = "randomchar__img";
+            let charItemClassName = "char__item";
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
-                charItemClassName = "char__item__img char__item__img__default"
+                charItemClassName = "char__item char__item__default"
             }
 
             return(
-                <li className={charItemClassName} key={item.id}>
-                    <img className={charItemClassName} src={item.thumbnail} alt={item.name} />
+                <li className={charItemClassName} key={item.id} onClick={()=> this.props.onCharSelected(item.id)}>
+                    <img  src={item.thumbnail} alt={item.name} />
                     <div className="char__name">{item.name}</div>
                 </li>
             )
@@ -60,7 +83,7 @@ class CharList extends Component {
 
 
     render() {
-        const {itemsArr, loading, error} = this.state;
+        const {itemsArr, loading, error, newItemLoading, offset, charEnded} = this.state;
 
         const items = this.createCharList(itemsArr);
 
@@ -72,7 +95,10 @@ class CharList extends Component {
                 {renderingError}
                 {renderingLoading}
                 {renderingContent}
-                <button className="button button__main button__long">
+                <button disabled={newItemLoading}
+                onClick={() => this.onRequest(offset)}
+                style={{'display': charEnded ? 'none' : 'block'}}
+                className="button button__main button__long">
                     <div className="inner">load more</div>
                 </button>
             </div>

@@ -13,6 +13,11 @@
   cursor: pointer;
 }
 
+.button:disabled {
+  -webkit-filter: grayscale(50%);
+          filter: grayscale(50%);
+}
+
 .button__long {
   display: block;
   width: 170px;
