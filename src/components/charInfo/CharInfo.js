@@ -1,4 +1,5 @@
 import { Component } from "react";
+import propTypes from "prop-types";
 import MarvelService from "../../services/MarvelService";
 import "./charInfo.scss";
 import Spinner from "../spinner/Spinner";
@@ -126,5 +127,15 @@ const View = ({ char }) => {
         </>
     );
 };
+
+// Чтобы проверить тип даныых в пропсе без тайп скрипт:
+//  1. установать пакет PropTypes : npm i prop-types и импорт
+                            // .isRequired для тог, тобы проверить пришел ли вообще пропс
+CharInfo.propTypes = {
+    charId: propTypes.number.isRequired
+}
+//  можно проверять не только на обыные типы данных, но и на определенные структуры
+// еще можно поставить дефолтный пропс
+//  подробнее: https://ru.reactjs.org/docs/typechecking-with-proptypes.html
 
 export default CharInfo;
