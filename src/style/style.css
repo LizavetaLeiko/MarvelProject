@@ -5,30 +5,26 @@
   text-align: center;
   text-transform: uppercase;
   font-size: 14px;
-  -webkit-transition: 0.3s -webkit-transform;
-  transition: 0.3s -webkit-transform;
   transition: 0.3s transform;
-  transition: 0.3s transform, 0.3s -webkit-transform;
   border: none;
   background-color: transparent;
   cursor: pointer;
 }
-
+.button:disabled {
+  filter: grayscale(50%);
+}
 .button__long {
   display: block;
   width: 170px;
   margin: 45px auto 0 auto;
 }
-
 .button .inner {
   position: relative;
   background-color: #9F0013;
   line-height: 18px;
   padding: 0 18px;
-  -webkit-transition: none;
   transition: none;
 }
-
 .button .inner::before {
   border-color: #9F0013 transparent;
   border-style: solid;
@@ -38,10 +34,8 @@
   position: absolute;
   left: 0;
   top: -10px;
-  -webkit-transition: none;
   transition: none;
 }
-
 .button .inner::after {
   border-color: #9F0013 transparent;
   border-style: solid;
@@ -51,69 +45,52 @@
   position: absolute;
   right: 0;
   bottom: -10px;
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
-  -webkit-transition: none;
+  transform: rotate(180deg);
   transition: none;
 }
-
 .button__main:hover, .button__secondary:hover {
   color: #fff;
 }
-
 .button__secondary .inner {
   background-color: #5C5C5C;
 }
-
 .button__secondary .inner::before {
   border-color: #5C5C5C transparent;
-  -webkit-transition: none;
   transition: none;
 }
-
 .button__secondary .inner::after {
   border-color: #5C5C5C transparent;
-  -webkit-transition: none;
   transition: none;
 }
-
 .button::before {
-  content: '';
+  content: "";
   display: block;
   height: 10px;
   margin-left: 10px;
-  -webkit-transition: none;
   transition: none;
 }
-
 .button::after {
-  content: '';
+  content: "";
   display: block;
   height: 10px;
   margin-right: 10px;
-  -webkit-transition: none;
   transition: none;
 }
-
 .button.button__main::before, .button.button__main::after {
   background-color: #9F0013;
 }
-
 .button.button__secondary::before, .button.button__secondary::after {
   background-color: #5C5C5C;
 }
-
 .button:hover {
-  -webkit-transform: translateY(-5px);
-          transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 * {
   font-family: "Roboto Condensed", sans-serif;
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 ul,
@@ -138,7 +115,6 @@ a {
   color: inherit;
   display: inline-block;
 }
-
 a:hover {
   text-decoration: none;
   color: inherit;
@@ -161,7 +137,6 @@ input::-webkit-inner-spin-button {
   padding: 50px 0 50px 0;
   position: relative;
 }
-
 .app .bg-decoration {
   position: absolute;
   right: -174px;
@@ -175,8 +150,8 @@ main {
 }
 
 .pulse {
-  -webkit-animation: pulse 1.5s ease-in-out .5s infinite;
-          animation: pulse 1.5s ease-in-out .5s infinite;
+  -webkit-animation: pulse 1.5s ease-in-out 0.5s infinite;
+          animation: pulse 1.5s ease-in-out 0.5s infinite;
 }
 
 @-webkit-keyframes pulse {
@@ -184,7 +159,7 @@ main {
     opacity: 1;
   }
   50% {
-    opacity: .4;
+    opacity: 0.4;
   }
   100% {
     opacity: 1;
@@ -196,10 +171,9 @@ main {
     opacity: 1;
   }
   50% {
-    opacity: .4;
+    opacity: 0.4;
   }
   100% {
     opacity: 1;
   }
-}
-/*# sourceMappingURL=style.css.map */
+}/*# sourceMappingURL=style.css.map */

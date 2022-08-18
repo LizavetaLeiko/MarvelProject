@@ -1,4 +1,5 @@
-import {Component, useState, useEffect, useCallback} from 'react';
+import { toBePartiallyChecked } from '@testing-library/jest-dom/dist/matchers';
+import {Component, useState, useEffect, useCallback, useMemo} from 'react';
 import {Container} from 'react-bootstrap';
 
 // import './App.css';
@@ -56,16 +57,11 @@ import {Container} from 'react-bootstrap';
 //     }
 // имитация того, что мы получаем фото с апишки
 
+const countTotal= (num) => {
+    return num + 10;
+}
+
 const Slider = (props) => {
-    // нашу имитацию получения фото из апишки кидаем в useCallback,
-    // чтобы она не вызывала при каждом перерендеринге, а только при изменении определенного стейта
-    const getSomeImg = useCallback(()=>{
-        console.log('fetching');
-        return[
-            'https://images.pexels.com/photos/3110320/pexels-photo-3110320.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-            'https://images.pexels.com/photos/12617812/pexels-photo-12617812.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load'
-        ]
-        }, [slide])
 
     // Вариант 1 (лучше этот синтаксис):
 
@@ -87,9 +83,18 @@ const Slider = (props) => {
         console.log('log');
     }
 
-    const calcValue = () => {
+    function calcValue () {
         return Math.random() * (50 - 1) + 1;
     }
+    // нашу имитацию получения фото из апишки кидаем в useCallback,
+    // чтобы она не вызывала при каждом перерендеринге, а только при изменении определенного стейта
+    const getSomeImg = useCallback(()=>{
+        console.log('fetching');
+        return[
+            'https://images.pexels.com/photos/3110320/pexels-photo-3110320.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+            'https://images.pexels.com/photos/12617812/pexels-photo-12617812.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load'
+        ]
+        }, [slide]);
 
     // По сути, useEffect объединяет componentDidUpdate, componentDidMount и componentWillUnMount
             
@@ -120,7 +125,32 @@ const Slider = (props) => {
     //     }
 
 
+    // в таком виде у нас будет вызываться функиця при каждом апдейте (перерендеренге) независимо от того, какой стейт изменили
+    // const total = countTotal(slide);
+    // при таком синтаксисе useMemo как бы запоминает то, что выдает нам фунция и обновление происходит только когда обновился нужный стейт
+    // если триггерирующий стейт не прописать, то тотал посчитается только 1 раз при первом рендеринге
+    const total = useMemo(() =>{
+        return countTotal(slide);
+    }, [slide]);
+        // useMemo сохраняет именно значение, а useCallback сохраняет именно функцию
+        // useMemo запускается во время рендеринга, поэтому туда нельзя помещать побочные эффекты (например, запросы и подписки)
 
+    // пример использования useMemo для объектов:
+
+    // если код будет таким, то при каждом перерендеринге будет создаваться новый объект.
+    // А т.к. в js одинаковые объекты не равны (т.к. он сравнивает ссылки на объект, а не его соержимое), то каждый раз будет срабатывать useEffect
+    // const style = {
+    //     color: slide > 4 ? 'red' : 'black',
+    // }
+    // Поэтому нужно закешировать этoт объект (при обновлении всё так же будет создаваться новый объект, 
+    // чтобы соблюдать иммутабельность, но теперь он будет обновляться только когда изменяется нужный стейт):
+    const style = useMemo(()=>({
+        color: slide > 4 ? 'red' : 'black',
+    }), [slide]);
+
+    useEffect(()=>{
+        console.log('style');
+    }, [style])
 
     return (
         <Container>
@@ -136,6 +166,7 @@ const Slider = (props) => {
                 <Slides getSomeImg={getSomeImg}/>
                 <div className="text-center mt-5">Active slide {slide} <br/> {autoplay ? 'auto' : null}</div>
                                                                 {/* {state.slide}     {state.autoplay} */}
+                <div style={style} className="text-center mt-5">Total slides {total}</div>
                 <div className="buttons mt-3">
                     <button 
                         className="btn btn-primary me-2"

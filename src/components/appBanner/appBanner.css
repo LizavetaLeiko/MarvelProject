@@ -3,12 +3,9 @@
   background-color: #232222;
   height: 100px;
   padding: 0 25px 0 45px;
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 152px auto 133px;
-      grid-template-columns: 152px auto 133px;
+  grid-template-columns: 152px auto 133px;
 }
-
 .app__banner-text {
   font-weight: bold;
   font-size: 24px;
@@ -16,5 +13,4 @@
   color: #FFFFFF;
   padding-left: 83px;
   padding-top: 18px;
-}
-/*# sourceMappingURL=appBanner.css.map */
+}/*# sourceMappingURL=appBanner.css.map */
