@@ -1,77 +1,49 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import propTypes from "prop-types";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import "./charInfo.scss";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import Skeleton from "../skeleton/Skeleton";
 
-class CharInfo extends Component {
-    state = {
-        char: null,
-        loading: false,
-        error: false,
-    };
+const CharInfo = ({ charId }) => {
 
-    marvelService = new MarvelService();
+    const [char, setChar] = useState(null);
+    // const [loading, setLoading] = useState(false);
+    // const [error, setError] = useState(false);
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
-    onError = () => {
-        this.setState({
-            error: true,
-        });
-    };
+    useEffect(()=>{
+        updateChar();
+    },[charId]);
 
-    onCharLoaded = (char) => {
-        this.setState({
-            char,
-        });
-    };
-
-    onCharLoading = () => {
-        this.setState({
-            loading: true,
-        });
-    };
-
-    updaeChar = () => {
-        const { charId } = this.props;
-
+    const updateChar = () => {
         if (!charId) {
             return;
         }
-
-        // this.onCharLoading();
-
-        this.marvelService
-            .getCharacter(charId)
-            .then(this.onCharLoaded)
-            .catch(this.onError);
+        clearError();
+        getCharacter(charId)
+            .then(onCharLoaded);
+            // .catch(onError);
     };
 
-    componentDidMount() {
-        this.updaeChar();
-    }
+    // const onError = () => {
+    //     setError(true);
+    // };
 
-    // срабатывает когда приходит новые пропс или меняется стейт.
-    // Принимает в себя prevProps и prevState - предыдущий пропс и стейт
-    // Тут ни в коем слуае нельзя просто писать this.updaeChar(). Потому что попадем в бесконечный цикл и всё зависнет
-    componentDidUpdate(prevProps) {
-        // this.props.charId это нынешний пропс
-        if (this.props.charId !== prevProps.charId) {
-            this.updaeChar();
-        }
-    }
+    const onCharLoaded = (char) => {
+        setChar(char);
+        // setLoading(false);
+    };
 
-    render() {
-        const { char, loading, error } = this.state;
+    // const onCharLoading = () => {
+    //     setLoading(true);
+    // };
 
         const skeleton = char || loading || error ? null : <Skeleton />;
         const renderingError = error ? <ErrorMessage /> : null;
         const renderingLoading = loading ? <Spinner /> : null;
-        // т.е. когда Не (загузка, ошибка и пустой (нал) чар), то вью рендерим
-        const renderingContent = !(error || loading || !char) ? (
-            <View char={char} />
-        ) : null;
+        const renderingContent = !(error || loading || !char) ? <View char={char} /> : null;
 
         return (
             <div className="char__info">
@@ -82,7 +54,6 @@ class CharInfo extends Component {
             </div>
         );
     }
-}
 
 const View = ({ char }) => {
     const { name, description, thumbnail, homepage, wiki, comics } = char;
@@ -113,9 +84,8 @@ const View = ({ char }) => {
             <ul className="char__comics-list">
                 {comics.length > 0 ? null : "There is no comics with this character"}
                 {comics.map((item, i) => {
-                    // если будут айтемы с огромным количеством комиксов, то это ударит по производителности
                     if (i > 9) {
-                        return;
+                        return null;
                     }
                     return (
                         <li className="char__comics-item" key={i}>
@@ -128,14 +98,8 @@ const View = ({ char }) => {
     );
 };
 
-// Чтобы проверить тип даныых в пропсе без тайп скрипт:
-//  1. установать пакет PropTypes : npm i prop-types и импорт
-                            // .isRequired для тог, тобы проверить пришел ли вообще пропс
 CharInfo.propTypes = {
     charId: propTypes.number.isRequired
 }
-//  можно проверять не только на обыные типы данных, но и на определенные структуры
-// еще можно поставить дефолтный пропс
-//  подробнее: https://ru.reactjs.org/docs/typechecking-with-proptypes.html
 
 export default CharInfo;
