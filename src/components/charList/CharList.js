@@ -80,12 +80,7 @@ const CharList = (props) =>{
                     className={charItemClassName}
                     key={item.id}
                     onClick={() => {props.onCharSelected(item.id); focusOnItem(index);}}
-                    onKeyPress={(e) => {
-                        if (e.key === ' ' || e.key === "Enter") {
-                            props.onCharSelected(item.id);
-                            focusOnItem(index);
-                        }
-                    }}>
+                    >
                     <img src={item.thumbnail} alt={item.name} />
                     <div className="char__name">{item.name}</div>
                 </li>
@@ -131,3 +126,13 @@ CharList.propTypes ={
 }
 
 export default CharList;
+
+
+// если у нас есть компоненты, в которые часто приходят одинаковые пропсы, то их можно обернуть в функцию memo (если функциональный компонент),
+//  или использовать PureCompomnent вместо Component (если сомпонент классовый).
+// И в тот, и в том случае буду сравниваться поверхностные копии. Чтобы сравнивать глубоко, 
+// в memo добавить функцию propsCompare, в которой строго сравниваем пропсы и возврааем true\false и ее пробрасываем вторым аргументом мемо.
+// Чтобы сравнить глубокие коппии пропсов в классовом компоненте, нжно использовать наследования просто от компонента, а не от пуркомпонент и внутри метод shoulComponentUpdate со сравнением пропсов
+
+
+// Пересмотреть урок на реакт лейзи
