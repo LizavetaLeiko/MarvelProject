@@ -31,7 +31,7 @@ const Slider = ({initial}) => {
   }
 
   return (
-    <Container>
+    // <Container>
       <div className="slider w-50 m-auto">
         <img
           className="d-block w-100"
@@ -83,7 +83,7 @@ const Slider = ({initial}) => {
           </button>
         </div>
       </div>
-    </Container>
+    // </Container>
   );
 };
 
